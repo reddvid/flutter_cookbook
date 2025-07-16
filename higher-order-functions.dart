@@ -1,9 +1,18 @@
 import 'classes.dart';
 
 void higherOrderFunctions() {
-  final names = mapping();
+  final names = data
+      .map<Name>(
+        (rawName) =>
+            Name(rawName['first'] as String, rawName['last'] as String),
+      )
+      .where((name) => name.lastName.startsWith('M'))
+      .where((name) => name.firstName.length > 5)
+      .toList(growable: false);
+
   names.forEach(print);
 
+  mapping();
   sorting();
   filtering();
   reducing();
