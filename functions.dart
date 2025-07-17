@@ -87,3 +87,4 @@ void consumeClosure() {
 
   callbackExample(printSomething);
 }
+
