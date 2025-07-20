@@ -1,3 +1,4 @@
+import 'package:dogs/flex_screen.dart';
 import 'package:dogs/profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: ProfileScreen());
+    return const MaterialApp(home: FlexScreen());
   }
 }
