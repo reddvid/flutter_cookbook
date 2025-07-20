@@ -17,6 +17,11 @@ class BasicScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          Semantics(
+            image: true,
+            label: 'Microsoft Payout',
+            child: Image.asset('assets/pay.png'),
+          ),
           AspectRatio(aspectRatio: 1.0, child: ImmutableWidget()),
           TextLayout(),
         ],
