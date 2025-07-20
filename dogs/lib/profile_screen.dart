@@ -1,3 +1,4 @@
+import 'package:dogs/star.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -51,6 +52,7 @@ class ProfileDetails extends StatelessWidget {
             'Argo Loxot',
             style: TextStyle(fontSize: 35, fontWeight: FontWeight.w600),
           ),
+          const StarRating(value: 5),
           _buildDetailsRow('Age', '4'),
           _buildDetailsRow('Status', 'Good Boy'),
         ],
