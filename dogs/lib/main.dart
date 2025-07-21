@@ -12,6 +12,18 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: ECommerceScreen());
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        brightness: Brightness.light,
+        appBarTheme: AppBarTheme(
+          elevation: 10,
+          titleTextStyle: const TextTheme(
+            titleLarge: TextStyle(fontFamily: 'LeckerliOne', fontSize: 24),
+          ).titleLarge,
+        ),
+      ),
+      home: ECommerceScreen(),
+    );
   }
 }
