@@ -14,6 +14,8 @@ class _StopWatchState extends State<StopWatch> {
   late Timer timer;
   bool isTicking = false;
   final laps = <int>[];
+  final itemHeight = 60.0;
+  final scrollController = ScrollController();
 
   void _onTick(Timer timer) {
     if (mounted) {
@@ -28,6 +30,12 @@ class _StopWatchState extends State<StopWatch> {
       laps.add(milliseconds);
       milliseconds = 0;
     });
+
+    scrollController.animateTo(
+      itemHeight * laps.length,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeIn,
+    );
   }
 
   void _startTimer() {
@@ -48,17 +56,28 @@ class _StopWatchState extends State<StopWatch> {
   }
 
   Widget _buildLapDisplay() {
-    return ListView(
-      children: [
-        for (int milliseconds in laps)
-          ListTile(title: Text(_secondsText(milliseconds))),
-      ],
+    return Scrollbar(
+      child: ListView.builder(
+        controller: scrollController,
+        itemExtent: itemHeight,
+        itemCount: laps.length,
+        itemBuilder: (context, index) {
+          final milliseconds = laps[index];
+
+          return ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 50),
+            title: Text('Lap ${index + 1}'),
+            trailing: Text(_secondsText(milliseconds)),
+          );
+        },
+      ),
     );
   }
 
   @override
   void dispose() {
     timer.cancel();
+    scrollController.dispose();
     super.dispose();
   }
 
