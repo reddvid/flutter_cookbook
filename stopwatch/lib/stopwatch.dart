@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:stopwatch/platform_alert.dart';
 
 class StopWatch extends StatefulWidget {
   final String name;
@@ -55,6 +56,14 @@ class _StopWatchState extends State<StopWatch> {
     setState(() {
       isTicking = false;
     });
+
+    // Show alert dialog for total elapsed time
+    final totalRuntime = laps.fold(milliseconds, (total, lap) => total + lap);
+    final alert = PlatformAlert(
+      title: 'Run Completed!',
+      message: 'Total Run Time is ${_secondsText(totalRuntime)}.',
+    );
+    alert.show(context);
   }
 
   Widget _buildLapDisplay() {
@@ -132,7 +141,9 @@ class _StopWatchState extends State<StopWatch> {
       children: [
         ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all<Color>(Colors.green),
+            backgroundColor: WidgetStateProperty.all<Color>(
+              isTicking ? Colors.grey : Colors.green,
+            ),
             foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
           ),
           onPressed: isTicking ? null : _startTimer,
@@ -141,7 +152,9 @@ class _StopWatchState extends State<StopWatch> {
         const SizedBox(width: 20),
         ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all(Colors.yellow),
+            backgroundColor: WidgetStateProperty.all<Color>(
+              isTicking ? Colors.yellow : Colors.grey,
+            ),
           ),
           onPressed: isTicking ? _lap : null,
           child: const Text('Lap'),
@@ -150,7 +163,9 @@ class _StopWatchState extends State<StopWatch> {
         TextButton(
           onPressed: isTicking ? _stopTimer : null,
           style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all<Color>(Colors.red),
+            backgroundColor: WidgetStateProperty.all<Color>(
+              isTicking ? Colors.red : Colors.grey,
+            ),
             foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
           ),
           child: const Text('Stop'),
