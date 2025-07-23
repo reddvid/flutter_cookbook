@@ -50,7 +50,7 @@ class _StopWatchState extends State<StopWatch> {
     });
   }
 
-  void _stopTimer() {
+  void _stopTimer(BuildContext context) {
     timer.cancel();
 
     setState(() {
@@ -58,12 +58,43 @@ class _StopWatchState extends State<StopWatch> {
     });
 
     // Show alert dialog for total elapsed time
-    final totalRuntime = laps.fold(milliseconds, (total, lap) => total + lap);
-    final alert = PlatformAlert(
-      title: 'Run Completed!',
-      message: 'Total Run Time is ${_secondsText(totalRuntime)}.',
+    // final totalRuntime = laps.fold(milliseconds, (total, lap) => total + lap);
+    // final alert = PlatformAlert(
+    //   title: 'Run Completed!',
+    //   message: 'Total Run Time is ${_secondsText(totalRuntime)}.',
+    // );
+    // alert.show(context);
+
+    // Show bottom sheet for total runtime
+    final controller = showBottomSheet(
+      context: context,
+      builder: _buildRunCompletedSheet,
     );
-    alert.show(context);
+    Future.delayed(const Duration(seconds: 5)).then((_) {
+      controller.close();
+    });
+  }
+
+  Widget _buildRunCompletedSheet(BuildContext context) {
+    final totalRuntime = laps.fold(milliseconds, (total, lap) => total + lap);
+    final textTheme = Theme.of(context).textTheme;
+
+    return SafeArea(
+      child: Container(
+        color: Theme.of(context).cardColor,
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Run Finished!', style: textTheme.headlineSmall),
+              Text('Total Run Time is ${_secondsText(totalRuntime)}'),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildLapDisplay() {
@@ -160,15 +191,17 @@ class _StopWatchState extends State<StopWatch> {
           child: const Text('Lap'),
         ),
         const SizedBox(width: 20),
-        TextButton(
-          onPressed: isTicking ? _stopTimer : null,
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all<Color>(
-              isTicking ? Colors.red : Colors.grey,
+        Builder(
+          builder: (context) => TextButton(
+            onPressed: isTicking ? () => _stopTimer(context) : null,
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all<Color>(
+                isTicking ? Colors.red : Colors.grey,
+              ),
+              foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
             ),
-            foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
+            child: const Text('Stop'),
           ),
-          child: const Text('Stop'),
         ),
       ],
     );
