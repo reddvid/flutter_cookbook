@@ -13,7 +13,7 @@ class MasterPlanApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.purple),
       home: PlanProvider(
-        notifier: ValueNotifier<Plan>(const Plan()),
+        notifier: ValueNotifier<List<Plan>>(const []),
         child: const PlanScreen(),
       ),
     );
