@@ -14,7 +14,7 @@ class MasterPlanApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.purple),
       home: PlanProvider(
         notifier: ValueNotifier<List<Plan>>(const []),
-        child: const PlanScreen(),
+        child: const PlanScreen(plan: null,),
       ),
     );
   }
