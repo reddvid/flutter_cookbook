@@ -55,6 +55,7 @@ class _PlanScreenState extends State<PlanScreen> {
 
   Widget _buildAddTaskButton(BuildContext context) {
     ValueNotifier<List<Plan>> planNotifier = PlanProvider.of(context);
+
     return FloatingActionButton(
       child: const Icon(Icons.add),
       onPressed: () {

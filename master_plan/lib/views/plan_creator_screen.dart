@@ -15,6 +15,7 @@ class _PlanCreatorScreenState extends State<PlanCreatorScreen> {
 
   @override
   void dispose() {
+    textController.dispose();
     super.dispose();
   }
 
