@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:store_data/models/pizza.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MainApp());
@@ -29,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Pizza> myPizzas = [];
-
+  var formatCurrency = NumberFormat.currency(locale: 'en_PH', symbol: '₱');
   @override
   void initState() {
     super.initState();
@@ -49,7 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(myPizzas[index].pizzaName),
-            subtitle: Text(myPizzas[index].description),
+            subtitle: Text(
+              '${myPizzas[index].description} - ${formatCurrency.format(myPizzas[index].price)}',
+            ),
           );
         },
         itemCount: myPizzas.length,
