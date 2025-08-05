@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store_data/models/pizza.dart';
 import 'package:intl/intl.dart';
 
@@ -31,6 +32,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Pizza> myPizzas = [];
   var formatCurrency = NumberFormat.currency(locale: 'en_PH', symbol: '₱');
+  int appCounter = 0;
+
   @override
   void initState() {
     super.initState();
@@ -40,12 +43,25 @@ class _MyHomePageState extends State<MyHomePage> {
         myPizzas = value;
       });
     });
+
+    readAndWritePreference();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('JSON')),
+      appBar: AppBar(
+        title: Text('You have opened the app $appCounter times.'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              deletePreference();
+            },
+            tooltip: 'Reset counter',
+            icon: Icon(Icons.refresh),
+          ),
+        ],
+      ),
       body: ListView.builder(
         itemBuilder: (context, index) {
           return ListTile(
@@ -81,5 +97,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String convertToJson(List<Pizza> pizzas) {
     return jsonEncode(pizzas.map((pizza) => jsonEncode(pizza)).toList());
+  }
+
+  Future readAndWritePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    appCounter = prefs.getInt('appCounter') ?? 0;
+    appCounter++;
+
+    await prefs.setInt('appCounter', appCounter);
+
+    setState(() {
+      appCounter = appCounter;
+    });
+  }
+
+  Future deletePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    setState(() {
+      appCounter = 0;
+    });
   }
 }
