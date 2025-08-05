@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store_data/models/pizza.dart';
 import 'package:intl/intl.dart';
@@ -33,6 +34,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Pizza> myPizzas = [];
   var formatCurrency = NumberFormat.currency(locale: 'en_PH', symbol: '₱');
   int appCounter = 0;
+  String documentsPath = '';
+  String tempPath = '';
 
   @override
   void initState() {
@@ -45,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     readAndWritePreference();
+    getPaths();
   }
 
   @override
@@ -62,16 +66,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(myPizzas[index].pizzaName),
-            subtitle: Text(
-              '${myPizzas[index].description} - ${formatCurrency.format(myPizzas[index].price)}',
-            ),
-          );
-        },
-        itemCount: myPizzas.length,
+      body: Column(
+        children: [
+          Text('Doc path: $documentsPath'),
+          Text('Temp path: $tempPath'),
+          // Flexible(
+          //   child: ListView.builder(
+          //     itemBuilder: (context, index) {
+          //       return ListTile(
+          //         title: Text(myPizzas[index].pizzaName),
+          //         subtitle: Text(
+          //           '${myPizzas[index].description} - ${formatCurrency.format(myPizzas[index].price)}',
+          //         ),
+          //       );
+          //     },
+          //     itemCount: myPizzas.length,
+          //   ),
+          // ),
+        ],
       ),
     );
   }
@@ -117,6 +129,15 @@ class _MyHomePageState extends State<MyHomePage> {
     await prefs.clear();
     setState(() {
       appCounter = 0;
+    });
+  }
+
+  Future getPaths() async {
+    final docDir = await getApplicationDocumentsDirectory();
+    final tempDir = await getTemporaryDirectory();
+    setState(() {
+      documentsPath = docDir.path;
+      tempPath = tempDir.path;
     });
   }
 }
