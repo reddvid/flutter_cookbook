@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:books/geolocation.dart';
+import 'package:books/navigation_dialog.dart';
 import 'package:books/navigation_first.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -22,7 +23,7 @@ class MainApp extends StatelessWidget {
         primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: NavigationFirst(),
+      home: NavigationDialogScreen(),
     );
   }
 }
