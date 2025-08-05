@@ -23,7 +23,23 @@ class _LocationScreenState extends State<LocationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Current Location')),
-      body: Center(child: FutureBuilder(future: position, builder: (BuildContext context, Async))),
+      body: Center(
+        child: FutureBuilder(
+          future: position,
+          builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Text('Something terrible happened!');
+              }
+              return Text(snapshot.data.toString());
+            } else {
+              return const Text('');
+            }
+          },
+        ),
+      ),
     );
   }
 
