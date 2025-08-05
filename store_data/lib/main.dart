@@ -63,12 +63,20 @@ class _MyHomePageState extends State<MyHomePage> {
     ).loadString('assets/pizzalist.json');
 
     List pizzaMapList = jsonDecode(myString);
+
     List<Pizza> myPizzas = [];
     for (var pizza in pizzaMapList) {
       Pizza myPizza = Pizza.fromJson(pizza);
       myPizzas.add(myPizza);
     }
 
+    String json = convertToJson(myPizzas);
+    print(json);
+
     return myPizzas;
+  }
+
+  String convertToJson(List<Pizza> pizzas) {
+    return jsonEncode(pizzas.map((pizza) => jsonEncode(pizza)).toList());
   }
 }
