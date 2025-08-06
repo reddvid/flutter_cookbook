@@ -48,6 +48,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
     Random random = Random();
     int myNum = random.nextInt(10);
     numberStream.addNumberToSink(myNum);
+    // numberStream.addError();
   }
 
   @override
@@ -56,11 +57,19 @@ class _StreamHomePageState extends State<StreamHomePage> {
     numberStream = NumberStream();
     numberStreamController = numberStream.controller;
     Stream stream = numberStreamController.stream;
-    stream.listen((event) {
-      setState(() {
-        lastNumber = event;
-      });
-    });
+    stream
+        .listen((event) {
+          setState(() {
+            lastNumber = event;
+          });
+        })
+        .onError((error) {
+          setState(() {
+            lastNumber = -1;
+          });
+        });
+    colorStream = ColorStream();
+    changeColor();
   }
 
   @override
@@ -73,7 +82,23 @@ class _StreamHomePageState extends State<StreamHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Stream')),
-      body: Container(decoration: BoxDecoration(color: bgColor)),
+      body: Container(
+        decoration: BoxDecoration(color: bgColor),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(lastNumber.toString()),
+              ElevatedButton(
+                onPressed: () => addRandomNumber(),
+                child: Text('New Random Number'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
